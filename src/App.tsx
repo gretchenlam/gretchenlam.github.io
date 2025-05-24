@@ -188,9 +188,9 @@ export default function Home() {
               more than to explore other areas!
               <br /> outside of programming, i'm an avid coffee lover and have
               been trying my hand at latte art. though i'm nowhere near perfect,
-              i have so much fun attempting it each morning! i also love to
-              travel and explore new places with friends and family and want to
-              get more into plants and gardening 🌱
+              i have so much fun attempting it each morning! i also love to gym,
+              travel and explore new places, and want to get more into plants
+              and gardening 🌱
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-4xl">
