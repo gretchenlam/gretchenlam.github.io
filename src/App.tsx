@@ -119,7 +119,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <div className="relative isolate px-6 pt-14 lg:px-8">
+      <div className="relative isolate px-6 lg:px-8 min-h-screen flex items-center justify-center">
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <img
             src="/img/gradientgif.gif"
@@ -128,7 +128,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="mx-auto max-w-7xl py-32 sm:py-48 lg:py-56">
+        <div className="mx-auto max-w-7xl py-32 sm:py-48 lg:py-56 pt-14">
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="w-full lg:w-1/3 flex justify-center">
               <div className="h-64 w-64 rounded-full bg-gray-200 overflow-hidden border-4 border-white shadow-lg">
@@ -171,8 +171,8 @@ export default function Home() {
       </div>
 
       {/* About Section */}
-      <section id="about" className="py-24 sm:py-32 bg-white">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <section id="about" className="min-h-screen flex items-center justify-center bg-white">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32 flex flex-col items-center">
           <div className="mx-auto max-w-4xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               about me
@@ -237,8 +237,8 @@ export default function Home() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-24 sm:py-32 bg-gray-50">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <section id="projects" className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32 flex flex-col items-center">
           <div className="mx-auto max-w-4xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               projects
@@ -296,8 +296,8 @@ export default function Home() {
       </section>
 
       {/* Experience Section */}
-      <section id="experience" className="py-24 sm:py-32 bg-white">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <section id="experience" className="min-h-screen flex items-center justify-center bg-white">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32 flex flex-col items-center">
           <div className="mx-auto max-w-4xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               professional experience
@@ -398,8 +398,8 @@ export default function Home() {
       </section>
 
       {/* Education Section */}
-      <section id="education" className="py-24 sm:py-32 bg-gray-50">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <section id="education" className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32 flex flex-col items-center">
           <div className="mx-auto max-w-4xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               education
@@ -438,8 +438,8 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-24 sm:py-32 bg-white">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <section id="contact" className="min-h-screen flex items-center justify-center bg-white">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32 flex flex-col items-center">
           <div className="mx-auto max-w-4xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               get in touch
