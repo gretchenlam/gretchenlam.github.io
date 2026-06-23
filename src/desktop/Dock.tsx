@@ -1,19 +1,27 @@
 import { getAssetUrl } from "./desktopUtils";
-import type { DockApp, WindowId, WindowState } from "./types";
+import { stickyWindowIds } from "./desktopData";
+import type { DockApp, DockAppId, StickyWindowId, WindowState } from "./types";
 
 type DockProps = {
   apps: DockApp[];
   windows: WindowState[];
-  onOpen: (id: WindowId) => void;
+  onOpen: (id: DockAppId) => void;
 };
 
 export default function Dock({ apps, windows, onOpen }: DockProps) {
   return (
     <nav className="dock" aria-label="Dock">
       {apps.map((app) => {
-        const isOpen = windows.some(
-          (windowState) => windowState.id === app.id && windowState.isOpen
-        );
+        const isOpen =
+          app.id === "stickies"
+            ? windows.some(
+                (windowState) =>
+                  stickyWindowIds.includes(windowState.id as StickyWindowId) &&
+                  windowState.isOpen
+              )
+            : windows.some(
+                (windowState) => windowState.id === app.id && windowState.isOpen
+              );
 
         return (
           <button

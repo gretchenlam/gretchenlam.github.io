@@ -1,24 +1,31 @@
 import { BatteryMedium, Search, Wifi } from "lucide-react";
-import { activeAppLabels, dockApps } from "./desktopData";
+import { useState } from "react";
+import { activeAppLabels, dockApps, stickies } from "./desktopData";
 import { getAssetUrl, getMenuDateTimeLabel } from "./desktopUtils";
 import DesktopFiles from "./DesktopFiles";
 import DesktopWindow from "./DesktopWindow";
 import Dock from "./Dock";
-import BlankPdfWindow from "./apps/BlankPdfWindow";
+import AboutMeWindow from "./apps/AboutMeWindow";
 import MailWindow from "./apps/MailWindow";
 import NotesWindow from "./apps/NotesWindow";
 import PhotosWindow from "./apps/PhotosWindow";
+import ResumeWindow from "./apps/ResumeWindow";
+import StickyWidget from "./apps/StickyWidget";
 import { useDesktopState } from "./useDesktopState";
 import "./Desktop.css";
 
 export default function Desktop() {
   const desktop = useDesktopState();
+  const [systemMenuOpen, setSystemMenuOpen] = useState(false);
 
   return (
     <main
       className="desktop-shell"
       aria-label="macOS style portfolio desktop"
-      onPointerDown={() => desktop.setSelectedDesktopFile(null)}
+      onPointerDown={() => {
+        desktop.setSelectedDesktopFile(null);
+        setSystemMenuOpen(false);
+      }}
     >
       <div
         className="wallpaper"
@@ -30,9 +37,33 @@ export default function Desktop() {
 
       <header className="menu-bar" aria-label="Menu bar">
         <div className="menu-left">
-          <span className="system-mark" role="img" aria-label="Gretchen">
+          <button
+            className="system-mark"
+            type="button"
+            aria-label="Gretchen menu"
+            onPointerDown={(event) => event.stopPropagation()}
+            onClick={() => setSystemMenuOpen((current) => !current)}
+          >
             👩🏻‍💻
-          </span>
+          </button>
+          {systemMenuOpen && (
+            <div
+              className="system-menu"
+              role="menu"
+              onPointerDown={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  desktop.openWindow("about");
+                  setSystemMenuOpen(false);
+                }}
+              >
+                About Me
+              </button>
+            </div>
+          )}
           <strong>{activeAppLabels[desktop.activeWindowId]}</strong>
           <span>File</span>
           <span>Edit</span>
@@ -55,31 +86,53 @@ export default function Desktop() {
         onMoveStart={desktop.startFileMove}
       />
 
-      {desktop.openWindows.map((windowState) => (
-        <DesktopWindow
-          key={windowState.id}
-          windowState={windowState}
-          onClose={() => desktop.closeWindow(windowState.id)}
-          onFocus={() => desktop.focusWindow(windowState.id)}
-          onMoveStart={(event) => desktop.startWindowMove(windowState.id, event)}
-          onResizeStart={(direction, event) =>
-            desktop.startWindowResize(windowState.id, direction, event)
-          }
-          onZoom={() => desktop.toggleZoomWindow(windowState.id)}
-        >
-          {windowState.id === "photos" ? (
-            <PhotosWindow />
-          ) : windowState.id === "mail" ? (
-            <MailWindow />
-          ) : windowState.id === "notes" ? (
-            <NotesWindow />
-          ) : (
-            <BlankPdfWindow />
-          )}
-        </DesktopWindow>
-      ))}
+      {desktop.openWindows.map((windowState) => {
+        const sticky = stickies.find((item) => item.id === windowState.id);
 
-      <Dock apps={dockApps} windows={desktop.openWindows} onOpen={desktop.openWindow} />
+        if (sticky) {
+          return (
+            <StickyWidget
+              key={windowState.id}
+              sticky={sticky}
+              windowState={windowState}
+              onClose={() => desktop.closeWindow(windowState.id)}
+              onFocus={() => desktop.focusWindow(windowState.id)}
+              onMoveStart={(event) => desktop.startWindowMove(windowState.id, event)}
+              onResizeStart={(direction, event) =>
+                desktop.startWindowResize(windowState.id, direction, event)
+              }
+            />
+          );
+        }
+
+        return (
+          <DesktopWindow
+            key={windowState.id}
+            windowState={windowState}
+            onClose={() => desktop.closeWindow(windowState.id)}
+            onFocus={() => desktop.focusWindow(windowState.id)}
+            onMoveStart={(event) => desktop.startWindowMove(windowState.id, event)}
+            onResizeStart={(direction, event) =>
+              desktop.startWindowResize(windowState.id, direction, event)
+            }
+            onZoom={() => desktop.toggleZoomWindow(windowState.id)}
+          >
+            {windowState.id === "photos" ? (
+              <PhotosWindow />
+            ) : windowState.id === "mail" ? (
+              <MailWindow />
+            ) : windowState.id === "notes" ? (
+              <NotesWindow />
+            ) : windowState.id === "about" ? (
+              <AboutMeWindow />
+            ) : (
+              <ResumeWindow />
+            )}
+          </DesktopWindow>
+        );
+      })}
+
+      <Dock apps={dockApps} windows={desktop.openWindows} onOpen={desktop.openDockApp} />
     </main>
   );
 }

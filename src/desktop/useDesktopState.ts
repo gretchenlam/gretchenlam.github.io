@@ -11,14 +11,26 @@ import {
   initialWindows,
   MIN_WINDOW_HEIGHT,
   MIN_WINDOW_WIDTH,
+  stickyWindowIds,
 } from "./desktopData";
 import { clamp } from "./desktopUtils";
 import type {
   DesktopFileId,
+  DockAppId,
   InteractionSession,
   ResizeDirection,
+  StickyWindowId,
   WindowId,
 } from "./types";
+
+const isStickyWindow = (id: WindowId) =>
+  stickyWindowIds.includes(id as StickyWindowId);
+
+const getMinWindowWidth = (id: WindowId) =>
+  isStickyWindow(id) ? 220 : MIN_WINDOW_WIDTH;
+
+const getMinWindowHeight = (id: WindowId) =>
+  isStickyWindow(id) ? 170 : MIN_WINDOW_HEIGHT;
 
 export function useDesktopState() {
   const [windows, setWindows] = useState(initialWindows);
@@ -56,6 +68,30 @@ export function useDesktopState() {
       }));
     },
     [getNextZ]
+  );
+
+  const openDockApp = useCallback(
+    (id: DockAppId) => {
+      if (id !== "stickies") {
+        openWindow(id);
+        return;
+      }
+
+      setWindows((current) => {
+        const nextWindows = { ...current };
+
+        stickyWindowIds.forEach((stickyId) => {
+          nextWindows[stickyId] = {
+            ...nextWindows[stickyId],
+            isOpen: true,
+            zIndex: getNextZ(),
+          };
+        });
+
+        return nextWindows;
+      });
+    },
+    [getNextZ, openWindow]
   );
 
   const closeWindow = useCallback((id: WindowId) => {
@@ -114,8 +150,8 @@ export function useDesktopState() {
             ...targetWindow,
             x: 18,
             y: 42,
-            width: Math.max(MIN_WINDOW_WIDTH, window.innerWidth - 36),
-            height: Math.max(MIN_WINDOW_HEIGHT, window.innerHeight - 126),
+            width: Math.max(getMinWindowWidth(id), window.innerWidth - 36),
+            height: Math.max(getMinWindowHeight(id), window.innerHeight - 126),
             restore: {
               x: targetWindow.x,
               y: targetWindow.y,
@@ -279,6 +315,8 @@ export function useDesktopState() {
         const deltaY = event.clientY - session.pointerY;
         const right = session.startX + session.startWidth;
         const bottom = session.startY + session.startHeight;
+        const minWidth = getMinWindowWidth(session.id);
+        const minHeight = getMinWindowHeight(session.id);
         let x = session.startX;
         let y = session.startY;
         let width = session.startWidth;
@@ -287,24 +325,24 @@ export function useDesktopState() {
         if (session.direction.includes("e")) {
           width = clamp(
             session.startWidth + deltaX,
-            MIN_WINDOW_WIDTH,
-            Math.max(MIN_WINDOW_WIDTH, window.innerWidth - session.startX - 12)
+            minWidth,
+            Math.max(minWidth, window.innerWidth - session.startX - 12)
           );
         }
 
         if (session.direction.includes("s")) {
           height = clamp(
             session.startHeight + deltaY,
-            MIN_WINDOW_HEIGHT,
-            Math.max(MIN_WINDOW_HEIGHT, window.innerHeight - session.startY - 86)
+            minHeight,
+            Math.max(minHeight, window.innerHeight - session.startY - 86)
           );
         }
 
         if (session.direction.includes("w")) {
           width = clamp(
             session.startWidth - deltaX,
-            MIN_WINDOW_WIDTH,
-            Math.max(MIN_WINDOW_WIDTH, right - 8)
+            minWidth,
+            Math.max(minWidth, right - 8)
           );
           x = right - width;
         }
@@ -312,8 +350,8 @@ export function useDesktopState() {
         if (session.direction.includes("n")) {
           height = clamp(
             session.startHeight - deltaY,
-            MIN_WINDOW_HEIGHT,
-            Math.max(MIN_WINDOW_HEIGHT, bottom - 34)
+            minHeight,
+            Math.max(minHeight, bottom - 34)
           );
           y = bottom - height;
         }
@@ -352,6 +390,7 @@ export function useDesktopState() {
     closeWindow,
     desktopFiles,
     focusWindow,
+    openDockApp,
     openWindow,
     openWindows,
     selectedDesktopFile,

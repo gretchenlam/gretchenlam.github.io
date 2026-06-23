@@ -1,35 +1,51 @@
 import { useState } from "react";
+import { noteGroups } from "../desktopData";
+import { getAssetUrl } from "../desktopUtils";
 
-const notePages = [0, 1, 2];
+const flattenedNotes = noteGroups.flatMap((group) => group.notes);
 
 export default function NotesWindow() {
-  const [selectedPage, setSelectedPage] = useState(0);
+  const [selectedNoteId, setSelectedNoteId] = useState(flattenedNotes[0].id);
+  const activeNote =
+    flattenedNotes.find((note) => note.id === selectedNoteId) ?? flattenedNotes[0];
 
   return (
     <div className="notes-window-body">
-      <aside className="notes-sidebar" aria-label="Notes pages">
-        {notePages.map((page) => (
-          <button
-            className={`note-page-button ${selectedPage === page ? "selected" : ""}`}
-            key={page}
-            type="button"
-            aria-label={`Note ${page + 1}`}
-            onClick={() => setSelectedPage(page)}
-          >
-            <span />
-            <span />
-          </button>
-        ))}
-      </aside>
-      <section className="note-editor" aria-label={`Note page ${selectedPage + 1}`}>
-        <div className="note-paper" aria-hidden="true">
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-        </div>
-      </section>
+      <div className="notes-main">
+        <aside className="notes-sidebar" aria-label="Notes pages">
+          {noteGroups.map((group) => (
+            <section className="note-date-group" key={group.label}>
+              <h3>{group.label}</h3>
+              {group.notes.map((note) => (
+                <button
+                  className={`note-page-button ${
+                    activeNote.id === note.id ? "selected" : ""
+                  }`}
+                  key={note.id}
+                  type="button"
+                  aria-label={note.title}
+                  onClick={() => setSelectedNoteId(note.id)}
+                >
+                  <strong>{note.title}</strong>
+                  <span>
+                    {note.date} {note.preview}
+                  </span>
+                </button>
+              ))}
+            </section>
+          ))}
+        </aside>
+        <section className="note-editor" aria-label={activeNote.title}>
+          <article className="note-paper">
+            <time>{activeNote.date}</time>
+            <h2>{activeNote.title}</h2>
+            <p>{activeNote.body}</p>
+            {activeNote.imageSrc && (
+              <img src={getAssetUrl(activeNote.imageSrc)} alt="" />
+            )}
+          </article>
+        </section>
+      </div>
     </div>
   );
 }

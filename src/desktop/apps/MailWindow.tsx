@@ -1,28 +1,27 @@
-import { CircleUserRound } from "lucide-react";
+import { Mail } from "lucide-react";
+import { mailContact } from "../desktopData";
+import { getAssetUrl } from "../desktopUtils";
 
 export default function MailWindow() {
   return (
     <div className="mail-window-body">
-      <aside className="mail-sidebar" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-        <span />
-      </aside>
       <section className="contact-card" aria-label="Contact card">
-        <div className="contact-avatar" aria-hidden="true">
-          <CircleUserRound size={72} strokeWidth={1.2} />
+        <img src={getAssetUrl(mailContact.headshot)} alt="" />
+        <div className="contact-copy">
+          <p>Contact Card</p>
+          <h2>{mailContact.name}</h2>
+          <a className="email-link" href={`mailto:${mailContact.email}`}>
+            <Mail size={16} strokeWidth={2.1} aria-hidden="true" />
+            {mailContact.email}
+          </a>
         </div>
-        <div className="contact-lines" aria-hidden="true">
-          <span />
-          <span />
-          <span />
-          <span />
-        </div>
-        <div className="contact-actions" aria-hidden="true">
-          <span />
-          <span />
-          <span />
+        <div className="contact-links">
+          {mailContact.links.map((link) => (
+            <a href={link.href} target="_blank" rel="noreferrer" key={link.href}>
+              <span>{link.label}</span>
+              <strong>{link.display}</strong>
+            </a>
+          ))}
         </div>
       </section>
     </div>

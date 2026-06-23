@@ -1,6 +1,16 @@
-export type WindowId = "resume" | "about" | "photos" | "mail" | "notes";
+export type StickyWindowId = "stickyIdeas" | "stickyPhotos" | "stickyAbout";
 
-export type DesktopFileId = Extract<WindowId, "resume" | "about">;
+export type WindowId =
+  | "resume"
+  | "photos"
+  | "mail"
+  | "notes"
+  | "about"
+  | StickyWindowId;
+
+export type DockAppId = "photos" | "mail" | "notes" | "stickies";
+
+export type DesktopFileId = Extract<WindowId, "resume">;
 
 export type ResizeDirection = "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw";
 
@@ -21,12 +31,13 @@ export type WindowState = WindowGeometry & {
 export type DesktopFileState = {
   id: DesktopFileId;
   label: string;
+  previewSrc?: string;
   x: number;
   y: number;
 };
 
 export type DockApp = {
-  id: Extract<WindowId, "photos" | "mail" | "notes">;
+  id: DockAppId;
   label: string;
   iconSrc: string;
 };

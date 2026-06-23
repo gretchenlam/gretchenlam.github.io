@@ -1,4 +1,4 @@
-import { Minus, X } from "lucide-react";
+import { Maximize2, Minus, X } from "lucide-react";
 import type {
   CSSProperties,
   PointerEvent as ReactPointerEvent,
@@ -81,7 +81,9 @@ export default function DesktopWindow({
             aria-label="Zoom"
             title="Zoom"
             onClick={onZoom}
-          />
+          >
+            <Maximize2 size={8} strokeWidth={3} aria-hidden="true" />
+          </button>
         </div>
         <strong>{windowTitles[windowState.id]}</strong>
       </header>

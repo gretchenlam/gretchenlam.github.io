@@ -6,11 +6,13 @@ test("renders the desktop shell", () => {
 
   expect(screen.getByLabelText(/macos style portfolio desktop/i)).toBeInTheDocument();
   expect(screen.getByRole("navigation", { name: /dock/i })).toBeInTheDocument();
-  expect(screen.getByLabelText("Gretchen")).toHaveTextContent("👩🏻‍💻");
+  const systemMenuButton = screen.getByRole("button", { name: /gretchen menu/i });
+  expect(systemMenuButton).toHaveTextContent("👩🏻‍💻");
 
   const photosButton = screen.getByRole("button", { name: /photos/i });
   const mailButton = screen.getByRole("button", { name: /mail/i });
   const notesButton = screen.getByRole("button", { name: /notes/i });
+  const stickiesButton = screen.getByRole("button", { name: /stickies/i });
 
   expect(photosButton.querySelector("img")?.getAttribute("src")).toContain(
     "apple-photos-icon.webp"
@@ -21,15 +23,54 @@ test("renders the desktop shell", () => {
   expect(notesButton.querySelector("img")?.getAttribute("src")).toContain(
     "apple-notes-icon.webp"
   );
-  expect(screen.getByRole("button", { name: /open resume\.pdf/i })).toBeInTheDocument();
+  expect(stickiesButton.querySelector("img")?.getAttribute("src")).toContain(
+    "apple-stickies-icon.svg"
+  );
+
+  fireEvent.click(systemMenuButton);
+  fireEvent.click(screen.getByRole("menuitem", { name: /about me/i }));
+  expect(screen.getByRole("heading", { name: /gretchen lam/i })).toBeInTheDocument();
+  expect(screen.getByText(/UC Santa Barbara, BS Computer Science/i)).toBeInTheDocument();
+
+  const resumeFile = screen.getByRole("button", { name: /open resume\.pdf/i });
+  expect(resumeFile).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: /open about_me\.pdf/i })).not.toBeInTheDocument();
+
+  fireEvent.doubleClick(resumeFile);
+  const resumePreview = screen.getByLabelText(/resume pdf preview/i);
+  const resumePage = screen.getByRole("img", { name: /resume page/i });
+  expect(resumePage).toHaveAttribute(
+    "src",
+    expect.stringContaining("files/resume-page-1.png")
+  );
+  expect(screen.queryByRole("button", { name: /zoom in/i })).not.toBeInTheDocument();
+  fireEvent.wheel(resumePreview, { ctrlKey: true, deltaY: -100 });
+  expect(resumePage).toHaveStyle({ width: "66%" });
 
   fireEvent.click(photosButton);
   expect(screen.queryByRole("button", { name: /upload photos/i })).not.toBeInTheDocument();
   expect(container.querySelector('input[type="file"]')).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /recents/i })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /travel/i })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /hobbies/i })).toBeInTheDocument();
   expect(screen.getAllByLabelText("Resize window n").length).toBeGreaterThan(0);
 
+  fireEvent.click(mailButton);
+  expect(screen.getByRole("link", { name: /gretchenlam03@gmail\.com/i })).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: /github/i })).toBeInTheDocument();
+
   fireEvent.click(notesButton);
-  expect(screen.getByRole("button", { name: "Note 1" })).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "Note 2" })).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "Note 3" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /Closet Tracker/i })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /VR Cooking Simulation/i })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /Facial Frenzy/i })).toBeInTheDocument();
+  expect(screen.queryByLabelText(/notes toolbar/i)).not.toBeInTheDocument();
+
+  fireEvent.click(stickiesButton);
+  expect(screen.getByText(/Portfolio polish/i)).toBeInTheDocument();
+  expect(screen.getByText(/Add coffee, travel, projects/i)).toBeInTheDocument();
+  expect(screen.getByText(/Maybe this should feel/i)).toBeInTheDocument();
+  expect(
+    screen.getByRole("button", { name: /close portfolio polish/i })
+  ).toBeInTheDocument();
+  expect(screen.queryByRole("article", { name: /^Stickies$/i })).not.toBeInTheDocument();
 });

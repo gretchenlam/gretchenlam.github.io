@@ -1,10 +1,10 @@
-import { FileText } from "lucide-react";
 import type {
   DesktopFileId,
   DesktopFileState,
   WindowId,
 } from "./types";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
+import { getAssetUrl } from "./desktopUtils";
 
 type DesktopFilesProps = {
   files: DesktopFileState[];
@@ -47,8 +47,11 @@ export default function DesktopFiles({
             }
           }}
         >
-          <span className="pdf-icon" aria-hidden="true">
-            <FileText size={34} strokeWidth={1.7} />
+          <span
+            className={`pdf-icon ${file.previewSrc ? "document-preview" : ""}`}
+            aria-hidden="true"
+          >
+            {file.previewSrc && <img src={getAssetUrl(file.previewSrc)} alt="" />}
           </span>
           <span className="desktop-file-label">{file.label}</span>
         </button>
