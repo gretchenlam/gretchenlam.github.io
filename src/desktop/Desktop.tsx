@@ -1,5 +1,5 @@
 import { BatteryMedium, Search, Wifi } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { activeAppLabels, dockApps, stickies } from "./desktopData";
 import { getAssetUrl, getMenuDateTimeLabel } from "./desktopUtils";
 import DesktopFiles from "./DesktopFiles";
@@ -17,6 +17,26 @@ import "./Desktop.css";
 export default function Desktop() {
   const desktop = useDesktopState();
   const [systemMenuOpen, setSystemMenuOpen] = useState(false);
+  const [menuDateTimeLabel, setMenuDateTimeLabel] = useState(
+    getMenuDateTimeLabel
+  );
+
+  useEffect(() => {
+    const updateMenuDateTime = () => {
+      setMenuDateTimeLabel((current) => {
+        const next = getMenuDateTimeLabel();
+
+        return current === next ? current : next;
+      });
+    };
+
+    updateMenuDateTime();
+    const intervalId = window.setInterval(updateMenuDateTime, 1000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, []);
 
   return (
     <main
@@ -70,7 +90,7 @@ export default function Desktop() {
           <Search size={15} strokeWidth={2.2} aria-hidden="true" />
           <Wifi size={16} strokeWidth={2.2} aria-hidden="true" />
           <BatteryMedium size={18} strokeWidth={2.2} aria-hidden="true" />
-          <time>{getMenuDateTimeLabel()}</time>
+          <time>{menuDateTimeLabel}</time>
         </div>
       </header>
 

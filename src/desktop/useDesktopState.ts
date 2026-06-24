@@ -211,6 +211,11 @@ export function useDesktopState() {
       event.stopPropagation();
       event.currentTarget.setPointerCapture(event.pointerId);
       focusWindow(id);
+      const windowElement = event.currentTarget.closest<HTMLElement>(
+        ".window, .sticky-widget"
+      );
+
+      windowElement?.classList.add("is-resizing");
 
       interactionRef.current = {
         mode: "window-resize",
@@ -222,6 +227,7 @@ export function useDesktopState() {
         startY: windows[id].y,
         startWidth: windows[id].width,
         startHeight: windows[id].height,
+        element: windowElement,
       };
     },
     [focusWindow, windows]
@@ -421,6 +427,10 @@ export function useDesktopState() {
             },
           };
         });
+      }
+
+      if (session?.mode === "window-resize") {
+        session.element?.classList.remove("is-resizing");
       }
 
       interactionRef.current = null;

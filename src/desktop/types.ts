@@ -66,6 +66,7 @@ export type InteractionSession =
       startY: number;
       startWidth: number;
       startHeight: number;
+      element: HTMLElement | null;
     }
   | {
       mode: "file-move";
