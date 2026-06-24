@@ -262,9 +262,14 @@ button {
   border-radius: 12px;
   background: rgba(244, 248, 252, 0.72);
   box-shadow: var(--shadow);
-  transform: translate(var(--window-x), var(--window-y));
+  transform: translate3d(var(--window-x), var(--window-y), 0);
+  will-change: transform;
   backdrop-filter: blur(30px) saturate(1.45);
   -webkit-backdrop-filter: blur(30px) saturate(1.45);
+}
+
+.window.is-moving .window-body {
+  pointer-events: none;
 }
 
 .window::before {
@@ -344,6 +349,11 @@ button {
   position: relative;
   min-height: 0;
   overflow: hidden;
+}
+
+.photos-window .window-body,
+.notes-window .window-body {
+  container-type: inline-size;
 }
 
 .resize-handle {
@@ -486,6 +496,7 @@ button {
 .photos-sidebar button {
   display: block;
   width: 100%;
+  min-width: 0;
   border: 0;
   border-radius: 7px;
   background: transparent;
@@ -532,6 +543,7 @@ button {
   grid-template-columns: repeat(auto-fill, minmax(126px, 1fr));
   align-content: start;
   gap: 4px;
+  contain: layout paint;
   overflow: auto;
   padding: 4px;
 }
@@ -541,6 +553,8 @@ button {
   width: 100%;
   aspect-ratio: 1;
   background: rgba(225, 231, 238, 0.82);
+  content-visibility: auto;
+  contain-intrinsic-size: 126px 126px;
   object-fit: cover;
 }
 
@@ -879,7 +893,8 @@ button {
   overflow: hidden;
   border: 1px solid rgba(54, 47, 21, 0.16);
   box-shadow: 0 24px 48px rgba(20, 18, 10, 0.22);
-  transform: translate(var(--window-x), var(--window-y));
+  transform: translate3d(var(--window-x), var(--window-y), 0);
+  will-change: transform;
 }
 
 .sticky-widget.yellow {
@@ -1042,18 +1057,18 @@ button {
     transform: translate(9px, 38px);
   }
 
-  .photos-window-body,
-  .mail-window-body {
-    grid-template-columns: 1fr;
+  .photos-window-body {
+    grid-template-columns: 132px minmax(0, 1fr);
   }
 
   .notes-main {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(148px, 38%) minmax(0, 1fr);
   }
 
   .photos-sidebar,
   .notes-sidebar {
-    display: none;
+    gap: 8px;
+    padding-inline: 10px;
   }
 
   .sticky-widget {
@@ -1072,5 +1087,54 @@ button {
     width: 48px;
     height: 48px;
     border-radius: 13px;
+  }
+}
+
+@container (max-width: 540px) {
+  .photos-window-body {
+    grid-template-columns: 124px minmax(0, 1fr);
+  }
+
+  .photos-sidebar,
+  .notes-sidebar {
+    gap: 8px;
+    padding-inline: 9px;
+  }
+
+  .notes-main {
+    grid-template-columns: minmax(138px, 42%) minmax(0, 1fr);
+  }
+
+  .note-editor {
+    padding: 12px 18px 104px;
+  }
+
+  .note-paper {
+    padding-inline: 2px;
+  }
+
+  .note-paper h2 {
+    font-size: 1.55rem;
+  }
+
+  .note-paper p {
+    font-size: 14px;
+  }
+
+  .photos-sidebar button,
+  .note-page-button {
+    padding-inline: 7px;
+  }
+
+  .photos-toolbar {
+    padding-inline: 12px;
+  }
+
+  .photos-toolbar strong {
+    font-size: 16px;
+  }
+
+  .photos-toolbar span {
+    font-size: 11px;
   }
 }

@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { photoSections } from "../desktopData";
 import { getAssetUrl } from "../desktopUtils";
 
-export default function PhotosWindow() {
+function PhotosWindow() {
   const [selectedSectionId, setSelectedSectionId] = useState(photoSections[0].id);
   const selectedSection =
     photoSections.find((section) => section.id === selectedSectionId) ??
@@ -30,10 +30,19 @@ export default function PhotosWindow() {
         </div>
         <div className="photo-grid">
           {selectedSection.photos.map((photo) => (
-            <img src={getAssetUrl(photo.src)} alt={photo.alt} key={photo.src} />
+            <img
+              src={getAssetUrl(photo.src)}
+              alt={photo.alt}
+              key={photo.src}
+              loading="lazy"
+              decoding="async"
+              draggable={false}
+            />
           ))}
         </div>
       </section>
     </div>
   );
 }
+
+export default memo(PhotosWindow);

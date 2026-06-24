@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { noteGroups } from "../desktopData";
 import { getAssetUrl } from "../desktopUtils";
 
 const flattenedNotes = noteGroups.flatMap((group) => group.notes);
 
-export default function NotesWindow() {
+function NotesWindow() {
   const [selectedNoteId, setSelectedNoteId] = useState(flattenedNotes[0].id);
   const activeNote =
     flattenedNotes.find((note) => note.id === selectedNoteId) ?? flattenedNotes[0];
@@ -48,11 +48,23 @@ export default function NotesWindow() {
                 rel="noreferrer"
                 aria-label={`Open ${activeNote.title} repository`}
               >
-                <img src={getAssetUrl(activeNote.imageSrc)} alt="" />
+                <img
+                  src={getAssetUrl(activeNote.imageSrc)}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  draggable={false}
+                />
               </a>
             )}
             {activeNote.imageSrc && !activeNote.repoUrl && (
-              <img src={getAssetUrl(activeNote.imageSrc)} alt="" />
+              <img
+                src={getAssetUrl(activeNote.imageSrc)}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                draggable={false}
+              />
             )}
           </article>
         </section>
@@ -60,3 +72,5 @@ export default function NotesWindow() {
     </div>
   );
 }
+
+export default memo(NotesWindow);

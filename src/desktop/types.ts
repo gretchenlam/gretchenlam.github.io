@@ -52,6 +52,9 @@ export type InteractionSession =
       startY: number;
       width: number;
       height: number;
+      latestX: number;
+      latestY: number;
+      element: HTMLElement | null;
     }
   | {
       mode: "window-resize";

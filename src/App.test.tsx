@@ -56,6 +56,9 @@ test("renders the desktop shell", () => {
   expect(screen.getByRole("button", { name: /hobbies/i })).toBeInTheDocument();
   expect(screen.queryByRole("button", { name: /recents/i })).not.toBeInTheDocument();
   expect(screen.queryByRole("button", { name: /projects/i })).not.toBeInTheDocument();
+  expect(screen.queryByLabelText(/photo album/i)).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: /travel/i }));
+  expect(screen.getByRole("button", { name: /travel/i })).toHaveClass("selected");
   expect(screen.getAllByLabelText("Resize window n").length).toBeGreaterThan(0);
 
   fireEvent.click(mailButton);
@@ -74,6 +77,7 @@ test("renders the desktop shell", () => {
     "href",
     "https://github.com/ucsb-cs148-w25/pj12-closettracker"
   );
+  expect(screen.queryByLabelText(/note page/i)).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: /VR Cooking Simulation/i }));
   expect(
     screen.getByRole("link", { name: /open vr cooking simulation repository/i })

@@ -1,5 +1,5 @@
 import { Mail } from "lucide-react";
-import type { ComponentType } from "react";
+import { memo, type ComponentType } from "react";
 import { FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { mailContact } from "../desktopData";
 import { getAssetUrl } from "../desktopUtils";
@@ -10,7 +10,7 @@ const contactIcons: Record<string, ComponentType> = {
   Instagram: FaInstagram as ComponentType,
 };
 
-export default function MailWindow() {
+function MailWindow() {
   return (
     <div className="mail-window-body">
       <section className="contact-card" aria-label="Contact card">
@@ -44,3 +44,5 @@ export default function MailWindow() {
     </div>
   );
 }
+
+export default memo(MailWindow);

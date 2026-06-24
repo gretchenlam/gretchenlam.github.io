@@ -1,7 +1,8 @@
+import { memo } from "react";
 import { aboutMe } from "../desktopData";
 import { getAssetUrl } from "../desktopUtils";
 
-export default function AboutMeWindow() {
+function AboutMeWindow() {
   return (
     <section className="about-window-body" aria-label="About Me">
       <img src={getAssetUrl(aboutMe.profilePic)} alt="" />
@@ -18,3 +19,5 @@ export default function AboutMeWindow() {
     </section>
   );
 }
+
+export default memo(AboutMeWindow);

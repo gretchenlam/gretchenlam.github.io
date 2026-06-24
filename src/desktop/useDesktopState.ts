@@ -174,6 +174,11 @@ export function useDesktopState() {
 
       event.currentTarget.setPointerCapture(event.pointerId);
       focusWindow(id);
+      const windowElement = event.currentTarget.closest<HTMLElement>(
+        ".window, .sticky-widget"
+      );
+
+      windowElement?.classList.add("is-moving");
 
       interactionRef.current = {
         mode: "window-move",
@@ -184,6 +189,9 @@ export function useDesktopState() {
         startY: windows[id].y,
         width: windows[id].width,
         height: windows[id].height,
+        latestX: windows[id].x,
+        latestY: windows[id].y,
+        element: windowElement,
       };
     },
     [focusWindow, windows]
@@ -283,6 +291,27 @@ export function useDesktopState() {
         return;
       }
 
+      if (session.mode === "window-move" && session.element) {
+        const maxX = Math.max(8, window.innerWidth - 180);
+        const maxY = Math.max(36, window.innerHeight - 116);
+        const nextX = clamp(
+          session.startX + event.clientX - session.pointerX,
+          8 - session.width * 0.58,
+          maxX
+        );
+        const nextY = clamp(
+          session.startY + event.clientY - session.pointerY,
+          34,
+          maxY
+        );
+
+        session.latestX = nextX;
+        session.latestY = nextY;
+        session.element.style.setProperty("--window-x", `${nextX}px`);
+        session.element.style.setProperty("--window-y", `${nextY}px`);
+        return;
+      }
+
       setWindows((current) => {
         const targetWindow = current[session.id];
 
@@ -299,6 +328,9 @@ export function useDesktopState() {
             34,
             maxY
           );
+
+          session.latestX = nextX;
+          session.latestY = nextY;
 
           return {
             ...current,
@@ -371,6 +403,26 @@ export function useDesktopState() {
     };
 
     const stopInteraction = () => {
+      const session = interactionRef.current;
+
+      if (session?.mode === "window-move") {
+        session.element?.classList.remove("is-moving");
+
+        setWindows((current) => {
+          const targetWindow = current[session.id];
+
+          return {
+            ...current,
+            [session.id]: {
+              ...targetWindow,
+              x: session.latestX,
+              y: session.latestY,
+              restore: null,
+            },
+          };
+        });
+      }
+
       interactionRef.current = null;
     };
 

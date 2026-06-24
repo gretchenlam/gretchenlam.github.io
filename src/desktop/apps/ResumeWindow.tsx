@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { resumePages } from "../desktopData";
 import { clamp, getAssetUrl } from "../desktopUtils";
 
-export default function ResumeWindow() {
+function ResumeWindow() {
   const viewerRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(58);
 
@@ -52,3 +52,5 @@ export default function ResumeWindow() {
     </div>
   );
 }
+
+export default memo(ResumeWindow);
