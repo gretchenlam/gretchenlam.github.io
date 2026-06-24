@@ -40,7 +40,18 @@ export default function NotesWindow() {
             <time>{activeNote.date}</time>
             <h2>{activeNote.title}</h2>
             <p>{activeNote.body}</p>
-            {activeNote.imageSrc && (
+            {activeNote.imageSrc && activeNote.repoUrl && (
+              <a
+                className="note-image-link"
+                href={activeNote.repoUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Open ${activeNote.title} repository`}
+              >
+                <img src={getAssetUrl(activeNote.imageSrc)} alt="" />
+              </a>
+            )}
+            {activeNote.imageSrc && !activeNote.repoUrl && (
               <img src={getAssetUrl(activeNote.imageSrc)} alt="" />
             )}
           </article>

@@ -4,9 +4,9 @@ import { getAssetUrl } from "../desktopUtils";
 export default function AboutMeWindow() {
   return (
     <section className="about-window-body" aria-label="About Me">
-      <img src={getAssetUrl(aboutMe.headshot)} alt="" />
+      <img src={getAssetUrl(aboutMe.profilePic)} alt="" />
       <h2>{aboutMe.name}</h2>
-      <p>Personal Portfolio</p>
+      <p>Software Engineer</p>
       <dl>
         {aboutMe.rows.map(([label, value]) => (
           <div key={label}>

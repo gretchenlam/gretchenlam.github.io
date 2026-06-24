@@ -65,10 +65,6 @@ export default function Desktop() {
             </div>
           )}
           <strong>{activeAppLabels[desktop.activeWindowId]}</strong>
-          <span>File</span>
-          <span>Edit</span>
-          <span>View</span>
-          <span>Window</span>
         </div>
         <div className="menu-right" aria-label="System status">
           <Search size={15} strokeWidth={2.2} aria-hidden="true" />

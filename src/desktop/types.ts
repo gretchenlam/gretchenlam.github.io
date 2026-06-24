@@ -1,4 +1,4 @@
-export type StickyWindowId = "stickyIdeas" | "stickyPhotos" | "stickyAbout";
+export type StickyWindowId = "stickyIdeas";
 
 export type WindowId =
   | "resume"

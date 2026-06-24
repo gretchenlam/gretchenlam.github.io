@@ -6,6 +6,8 @@ import type {
   WindowState,
 } from "./types";
 
+export { photoSections } from "./photoLibrary.generated";
+
 export const MIN_WINDOW_WIDTH = 320;
 export const MIN_WINDOW_HEIGHT = 240;
 
@@ -28,8 +30,6 @@ export const dockApps: DockApp[] = [
 
 export const stickyWindowIds: StickyWindowId[] = [
   "stickyIdeas",
-  "stickyPhotos",
-  "stickyAbout",
 ];
 
 export const initialWindows: Record<WindowId, WindowState> = {
@@ -80,29 +80,11 @@ export const initialWindows: Record<WindowId, WindowState> = {
   },
   stickyIdeas: {
     id: "stickyIdeas",
-    isOpen: false,
+    isOpen: true,
     x: 184,
     y: 286,
     width: 420,
     height: 268,
-    zIndex: 10,
-  },
-  stickyPhotos: {
-    id: "stickyPhotos",
-    isOpen: false,
-    x: 646,
-    y: 168,
-    width: 360,
-    height: 244,
-    zIndex: 10,
-  },
-  stickyAbout: {
-    id: "stickyAbout",
-    isOpen: false,
-    x: 510,
-    y: 476,
-    width: 390,
-    height: 236,
     zIndex: 10,
   },
 };
@@ -113,9 +95,7 @@ export const windowTitles: Record<WindowId, string> = {
   mail: "Mail",
   notes: "Notes",
   about: "About Me",
-  stickyIdeas: "Portfolio polish",
-  stickyPhotos: "Photos",
-  stickyAbout: "About Me",
+  stickyIdeas: "hello, world!",
 };
 
 export const activeAppLabels: Record<WindowId | "finder", string> = {
@@ -126,67 +106,9 @@ export const activeAppLabels: Record<WindowId | "finder", string> = {
   notes: "Notes",
   about: "About Me",
   stickyIdeas: "Stickies",
-  stickyPhotos: "Stickies",
-  stickyAbout: "Stickies",
 };
 
 export const resumePages = ["files/resume-page-1.png"];
-
-const photoItems = {
-  headshot: {
-    src: "img/photos/headshot.jpg",
-    alt: "Portrait",
-  },
-  tahoe: {
-    src: "img/photos/tahoe-day.jpg",
-    alt: "Lake Tahoe",
-  },
-  closet: {
-    src: "img/closettracker.png",
-    alt: "Closet Tracker project",
-  },
-  cooking: {
-    src: "img/cooking.png",
-    alt: "VR Cooking project",
-  },
-  facialFrenzy: {
-    src: "img/facialfrenzy.png",
-    alt: "Facial Frenzy project",
-  },
-};
-
-export const photoSections = [
-  {
-    id: "recents",
-    title: "Recents",
-    sidebarLabel: "Recents",
-    photos: [
-      photoItems.headshot,
-      photoItems.tahoe,
-      photoItems.closet,
-      photoItems.cooking,
-      photoItems.facialFrenzy,
-    ],
-  },
-  {
-    id: "hobbies",
-    title: "Hobbies",
-    sidebarLabel: "Hobbies",
-    photos: [photoItems.headshot, photoItems.cooking],
-  },
-  {
-    id: "travel",
-    title: "Travel",
-    sidebarLabel: "Travel",
-    photos: [photoItems.tahoe],
-  },
-  {
-    id: "projects",
-    title: "Projects",
-    sidebarLabel: "Projects",
-    photos: [photoItems.closet, photoItems.cooking, photoItems.facialFrenzy],
-  },
-];
 
 export const mailContact = {
   name: "Gretchen Lam",
@@ -214,12 +136,12 @@ export const mailContact = {
 export const aboutMe = {
   name: "Gretchen Lam",
   headshot: "img/headshot.jpg",
+  profilePic: "img/profile-pic.jpeg",
   rows: [
-    ["Education", "UC Santa Barbara, BS Computer Science"],
-    ["Career", "Software Engineer"],
+    ["Education", "UC Santa Barbara"],
+    ["Field of Study", "B.S. in Computer Science"],
     ["Interests", "AI/ML, Frontend Development, Game Development"],
-    ["Focus", "Creative tools, computer vision, thoughtful interfaces"],
-    ["Currently", "Building a macOS-inspired portfolio desktop"],
+    ["Hobbies", "Traveling, Gaming, Gymming, Crocheting, Latte Art, Escape Rooms"],
   ],
 };
 
@@ -234,58 +156,34 @@ export const stickies: StickyNote[] = [
   {
     id: "stickyIdeas",
     color: "yellow",
-    title: "Portfolio polish",
-    body: "Make the desktop feel playful, but keep every interaction useful.",
-  },
-  {
-    id: "stickyPhotos",
-    color: "pink",
-    title: "Photos",
-    body: "Add coffee, travel, projects, and tiny behind-the-scenes moments.",
-  },
-  {
-    id: "stickyAbout",
-    color: "blue",
-    title: "About Me",
-    body: "Maybe this should feel like About This Mac, but warmer.",
+    title: "hello, world!",
+    body: "welcome to my portfolio desktop! feel free to explore the files, apps, and notes to learn more about me and my work :)",
   },
 ];
 
 export const noteGroups = [
   {
-    label: "2026",
+    label: "2025",
     notes: [
       {
         id: "closet-tracker",
         title: "Closet Tracker",
-        date: "Jun 23, 2026",
+        date: "Jun 23, 2025",
         preview: "Mobile wardrobe organizer with image upload and outfit planning.",
         body:
-          "A React Native and Firebase app for cataloging clothing, organizing categories, and turning a messy closet into searchable data. This note can grow into a project case study with screenshots, links, and implementation details.",
+          "A React Native and Firebase app for cataloging clothing, organizing categories, and turning a messy closet into searchable data.",
         imageSrc: "img/closettracker.png",
+        repoUrl: "https://github.com/ucsb-cs148-w25/pj12-closettracker",
       },
-      {
-        id: "portfolio-desktop",
-        title: "Portfolio Desktop",
-        date: "Jun 22, 2026",
-        preview: "A personal website disguised as a small macOS workspace.",
-        body:
-          "The goal is to make the portfolio feel discoverable instead of linear. Files, apps, notes, and photos can each reveal a different side of the work while keeping the home screen calm.",
-        imageSrc: "img/photos/tahoe-day.jpg",
-      },
-    ],
-  },
-  {
-    label: "2025",
-    notes: [
       {
         id: "vr-cooking",
         title: "VR Cooking Simulation",
         date: "Mar 14, 2025",
         preview: "A Unity cooking flow with interactive prompts and recipes.",
         body:
-          "A VR prototype focused on learning through tactile steps: grab, prep, cook, and plate. The project is a good place to talk about interaction design, tutorial pacing, and playful feedback loops.",
+          "A VR prototype focused on learning through tactile steps: grab, prep, cook, and plate.",
         imageSrc: "img/cooking.png",
+        repoUrl: "https://github.com/gretchenlam/unity-vr-cooking",
       },
       {
         id: "facial-frenzy",
@@ -293,8 +191,9 @@ export const noteGroups = [
         date: "Feb 7, 2025",
         preview: "Computer vision game built around expression recognition.",
         body:
-          "A Python-based game that turns facial recognition into a fast feedback loop. This note can become a case study on model integration, realtime constraints, and designing around imperfect signals.",
+          "A Python-based game that turns facial recognition into a fast feedback loop.",
         imageSrc: "img/facialfrenzy.png",
+        repoUrl: "https://github.com/gretchenlam/Facial-Frenzy",
       },
     ],
   },

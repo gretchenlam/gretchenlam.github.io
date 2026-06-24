@@ -30,7 +30,8 @@ test("renders the desktop shell", () => {
   fireEvent.click(systemMenuButton);
   fireEvent.click(screen.getByRole("menuitem", { name: /about me/i }));
   expect(screen.getByRole("heading", { name: /gretchen lam/i })).toBeInTheDocument();
-  expect(screen.getByText(/UC Santa Barbara, BS Computer Science/i)).toBeInTheDocument();
+  expect(screen.getByText(/UC Santa Barbara/i)).toBeInTheDocument();
+  expect(screen.getByText(/B\.S\. in Computer Science/i)).toBeInTheDocument();
 
   const resumeFile = screen.getByRole("button", { name: /open resume\.pdf/i });
   expect(resumeFile).toBeInTheDocument();
@@ -50,27 +51,44 @@ test("renders the desktop shell", () => {
   fireEvent.click(photosButton);
   expect(screen.queryByRole("button", { name: /upload photos/i })).not.toBeInTheDocument();
   expect(container.querySelector('input[type="file"]')).not.toBeInTheDocument();
-  expect(screen.getByRole("button", { name: /recents/i })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /favorites/i })).toBeInTheDocument();
   expect(screen.getByRole("button", { name: /travel/i })).toBeInTheDocument();
   expect(screen.getByRole("button", { name: /hobbies/i })).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: /recents/i })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: /projects/i })).not.toBeInTheDocument();
   expect(screen.getAllByLabelText("Resize window n").length).toBeGreaterThan(0);
 
   fireEvent.click(mailButton);
   expect(screen.getByRole("link", { name: /gretchenlam03@gmail\.com/i })).toBeInTheDocument();
   expect(screen.getByRole("link", { name: /github/i })).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: /linkedin/i })).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: /instagram/i })).toBeInTheDocument();
 
   fireEvent.click(notesButton);
   expect(screen.getByRole("button", { name: /Closet Tracker/i })).toBeInTheDocument();
   expect(screen.getByRole("button", { name: /VR Cooking Simulation/i })).toBeInTheDocument();
   expect(screen.getByRole("button", { name: /Facial Frenzy/i })).toBeInTheDocument();
+  expect(
+    screen.getByRole("link", { name: /open closet tracker repository/i })
+  ).toHaveAttribute(
+    "href",
+    "https://github.com/ucsb-cs148-w25/pj12-closettracker"
+  );
+  fireEvent.click(screen.getByRole("button", { name: /VR Cooking Simulation/i }));
+  expect(
+    screen.getByRole("link", { name: /open vr cooking simulation repository/i })
+  ).toHaveAttribute("href", "https://github.com/gretchenlam/unity-vr-cooking");
+  fireEvent.click(screen.getByRole("button", { name: /Facial Frenzy/i }));
+  expect(
+    screen.getByRole("link", { name: /open facial frenzy repository/i })
+  ).toHaveAttribute("href", "https://github.com/gretchenlam/Facial-Frenzy");
   expect(screen.queryByLabelText(/notes toolbar/i)).not.toBeInTheDocument();
 
+  expect(screen.getByText(/hello, world!/i)).toBeInTheDocument();
   fireEvent.click(stickiesButton);
-  expect(screen.getByText(/Portfolio polish/i)).toBeInTheDocument();
-  expect(screen.getByText(/Add coffee, travel, projects/i)).toBeInTheDocument();
-  expect(screen.getByText(/Maybe this should feel/i)).toBeInTheDocument();
+  expect(screen.getByText(/welcome to my portfolio desktop/i)).toBeInTheDocument();
   expect(
-    screen.getByRole("button", { name: /close portfolio polish/i })
+    screen.getByRole("button", { name: /close hello, world!/i })
   ).toBeInTheDocument();
   expect(screen.queryByRole("article", { name: /^Stickies$/i })).not.toBeInTheDocument();
 });
